@@ -130,6 +130,46 @@ end
 
 # Write code here
 
+def player_with_longest_name
+  
+  long = 0
+  long_name = []
+  
+  game_hash.each do |key, value|
+      value.each do |inner_key, inner_value|
+
+        if inner_key == :players
+          inner_value.each do |player_block|
+            player_block.each do |attributes, stats|
+              if attributes == :name
+                if long < stats.length
+                  long = stats.length
+                end
+                 binding.pry
+              end
+            end
+          end
+        end
+        
+        if inner_key == :players
+          inner_value.each do |player_block|
+            player_block.each do |attributes, stats|
+              if attributes == :name
+                if long == stats.length
+                  long_name << stats 
+                end
+              end
+            end
+          end
+        end
+      return long_name
+    end
+  end
+end  
+
+puts player_with_longest_name
+
+
 
 def num_points_scored (name)
  
@@ -272,4 +312,97 @@ def big_shoe_rebounds
   
 end
 
+
+
+def most_points_scored
+  
+  most_points = 0
+  game_hash.each do |key, value|
+    value.each do |inner_key, inner_value|
+      if inner_key == :players
+      
+        inner_value.each do |player_block|
+          player_block.each do |attributes, stats|
+              
+              if attributes == :points
+              while most_points < stats
+                most_points = stats
+              end
+            end  
+              
+          end  
+        end
+      
+        inner_value.each do |player_block|
+          player_block.each do |attributes, stats|
+            
+            if attributes == :points
+              if stats == most_points
+                return player_block[:name]
+              end
+            end
+            
+          end
+        end
+      
+      
+      end
+    end
+  end
+
+end  
+
+
+def winning_team 
+  
+home_array = []
+away_array = []
+  
+  game_hash.each do |key, value|
+    if key == :home
+      value.each do |inner_key, inner_value|
+
+        if inner_key == :players
+          inner_value.each do |player_block|
+            player_block.each do |attributes, stats|
+              if attributes == :points
+                home_array << stats
+              end
+            end
+          end      
+        end 
+      
+      end
+    end
+  end
+ 
+ game_hash.each do |key, value|
+    if key == :away
+      value.each do |inner_key, inner_value|
+
+        if inner_key == :players
+          inner_value.each do |player_block|
+            player_block.each do |attributes, stats|
+              if attributes == :points
+                away_array << stats
+              end
+            end
+          end      
+        end 
+      
+      end
+    end
+  end
+ 
+  if away_array.reduce {|sum, num| sum + num } > home_array.reduce {|sum, num| sum + num }
+    return game_hash[:away][:team_name]
+  elsif away_array.reduce {|sum, num| sum + num } < home_array.reduce {|sum, num| sum + num }
+    return game_hash[:home][:team_name]
+  else
+    return "it's a tie!"
+  end
+  
+end  
+
+#puts winning_team
 
